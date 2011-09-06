@@ -16,6 +16,7 @@ var vsprintf = require('sprintf').vsprintf, // 0.1.1
     
     locales = {},
     locale = 'en',
+    rtlLocales = ['he', 'ar'],
     directory = './locales';
 
 // public exports
@@ -31,12 +32,21 @@ i18n.configure = function(opt){
         });
     }
     
+    // Added a defaultLocale option
+    if(typeof opt.defaultLocale === 'string' && opt.defaultLocale.length > 0) {
+      locale = opt.defaultLocale;
+    }
+    
     // you may register helpers in global scope, up to you
     if( typeof opt.register === 'object' ){
         opt.register.__ = i18n.__;
         opt.register.__n = i18n.__n;
     }
 }
+
+i18n.isLocaleRTL = function () {
+  return rtlLocales.indexOf(locale) > -1;
+};
 
 i18n.init = function(request, response, next) { 
     if( typeof request === 'object' ){
